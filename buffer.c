@@ -108,7 +108,14 @@ void buffer_insert(int number)
     else if (buffer->curr_size == buffer->max_size){
         //printf("waiting for cond to get signal\n");
         pthread_cond_wait(&condTwo , &mutex); // wait until a slot becomes available
-        //printf("GOT IT\n");                                                              
+        //printf("GOT IT\n");  
+         helperNode->data = number;
+        helperNode->next = NULL;
+        buffer->tail->next = helperNode;
+        buffer->tail = buffer->tail->next;
+        buffer->curr_size++;
+        helperArray->items[number] = 1;
+         pthread_cond_signal(&cond);                                                            
 
     }
     //just add to our linked list
@@ -150,10 +157,11 @@ int buffer_extract(void)
     
     int temp = 0;
    pthread_mutex_lock(&mutex);
+   //printf("Current buffer sizes: (%i)\n",buffer->curr_size );
    while(buffer->curr_size == 0) {
-        printf("Have to wait because buffer size is: (%i)\n",buffer->curr_size );
+        //printf("Have to wait because buffer size is: (%i)\n",buffer->curr_size );
         pthread_cond_wait(&cond, &mutex);
-        printf("We have received the signal from curr size no longer 0\n");
+        //printf("We have received the signal from curr size no longer 0\n");
     }
     if(buffer->curr_size == 1) {
         temp = buffer->head->data;
@@ -165,7 +173,7 @@ int buffer_extract(void)
         buffer->head = buffer->head->next;
         buffer->curr_size--;
         helperArray->items[temp] = 1;
-    } else {
+    } else if (buffer->curr_size > 2) {
         temp = buffer->head->data;
         buffer->head = buffer->head->next;
         buffer->curr_size--;
@@ -178,13 +186,14 @@ int buffer_extract(void)
     }
     //printf("This is the items value: %i and it is set to: %i \n", temp, helperArray->items[temp]);
      while(helperArray->items[temp] == 1) {
-        printf("We have found the item in our list\n");
+        //printf("We have found the item in our list\n");
         pthread_cond_wait(&condTwo, &mutex);
     }
-    
+    helperArray->items[temp] = 0;
     pthread_mutex_unlock(&mutex);
     
     process(temp);
+    
     return temp;
 }
 
