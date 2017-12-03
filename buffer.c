@@ -106,7 +106,7 @@ void buffer_insert(int number)
     //ooooo shit our thing is packed
     else if (buffer->curr_size == buffer->max_size){
         //printf("waiting for cond to get signal\n");
-        pthread_cond_wait(&cond , &mutex); // wait until a slot becomes available
+        pthread_cond_wait(&condTwo , &mutex); // wait until a slot becomes available
         //printf("GOT IT\n");                                                              
 
     }
