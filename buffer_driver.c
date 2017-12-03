@@ -65,7 +65,7 @@ void *consumer_thread(void *raw_consumerno)
   while (1)
     {
       int number = buffer_extract();
-
+      printf("Buffer has extracted: %i\n", number);
       if (number == 0) {
         break;
       }
