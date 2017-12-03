@@ -64,8 +64,9 @@ void *consumer_thread(void *raw_consumerno)
   printf("  consumer %d: starting\n", consumerno);
   while (1)
     {
+      //printf("Has not extracted buffer yet but next line does\n");
       int number = buffer_extract();
-      printf("Buffer has extracted: %i\n", number);
+      //printf("Buffer has extracted: %i\n", number);
       if (number == 0) {
         break;
       }
