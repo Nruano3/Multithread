@@ -183,6 +183,8 @@ int buffer_extract(void)
     if( helperArray->items[temp] == 1) {
          pthread_cond_signal(&condTwo);
          helperArray->items[temp] = 0;
+        process(temp);
+    
     }
     //printf("This is the items value: %i and it is set to: %i \n", temp, helperArray->items[temp]);
      while(helperArray->items[temp] == 1) {
@@ -191,8 +193,8 @@ int buffer_extract(void)
     }
     helperArray->items[temp] = 0;
     pthread_mutex_unlock(&mutex);
+        process(temp);
     
-    process(temp);
     
     return temp;
 }
