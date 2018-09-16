@@ -1,1 +1,3 @@
-# cs2200-project5
+# Multi-threading
+
+Project covers the basics about pthread mutex locks. 
